@@ -1,6 +1,6 @@
 export default {
     "expo": {
-    "name": "TicketApp Accesos",
+    "name": "TicketApp Acceso",
         "slug": "TicketApp-Acceso",
         "owner": "tdp2-grupo4",
         "version": "1.0.0",
@@ -27,7 +27,7 @@ export default {
             "foregroundImage": "./assets/icon.png",
                 "backgroundColor": "#FFFFFF"
         },
-        "package": "uba.tdp2",
+        "package": "uba.tdp2.access",
             "intentFilters": [
             {
                 "action": "VIEW",
@@ -52,7 +52,7 @@ export default {
     "scheme": "tdp2-mobile",
         "extra": {
         "eas": {
-            "projectId": "8aecf97d-0eea-425b-b1ef-fb23b3b05e3d"
+            "projectId": "b56b464e-ea01-4d83-8c7c-9a603e8265a4"
         }
     }
 }

@@ -82,7 +82,7 @@ Para que ejecute algo siempre que se renderice el componente si es una entra de 
 ```
 
 ### Firebase
-- Luego de crear la app Android en firebase, poner el archivo google-services.json a la misma altura que el README.
+- Luego de crear la app Android en Firebase, poner el archivo google-services.json a la misma altura que el README.
   En la entrada "android" del ```app.json```, agregar:
 ```
   "googleServicesFile": "./google-services.json",
@@ -96,6 +96,19 @@ y el package y los intent filters según corresponda.
 
 - Manejo de tokens: https://firebase.google.com/docs/auth/admin/verify-id-tokens
 
+- RECORDAR TIRAR:
+```
+  eas credentials
+```  
+para inicializar las credenciales y poder agregar la URL de redirección en la consola
+de Google APIS (https://console.cloud.google.com/apis/credentials). La misma es:
+```
+https://auth.expo.io/[OWNER]/[SLUG]
+```
+según el owner y slug del app.json (o app.config.js).
+
+Ahora Expo maneja sus propios tokens, asi que aunque usemos Firebase, la validación es usando un token
+de Expo.
 
 ### Errores comunes
 - Packager is not running: asegurarse de que el celular y la computadora están en la misma red.
