@@ -58,14 +58,14 @@ export default function Events({ navigation }) {
                 end={{ x: 1, y: 1 }}
                 style={styles.searchBarContainer}
             >
-                <SearchBar
+                {/* <SearchBar
                     placeholder="Buscar"
                     onChangeText={updateSearch}
                     value={search}
                     lightTheme
                     inputContainerStyle={{backgroundColor:'white'}}
                     containerStyle={{backgroundColor: 'white', width: '90%', marginTop: 15, borderRadius:15}}
-                />
+                /> */}
             </LinearGradient>
             <ScrollView 
                 contentContainerStyle={{ flexGrow: 1, alignItems: 'center'}}

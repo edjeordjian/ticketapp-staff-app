@@ -4,12 +4,14 @@ import { Feather } from '@expo/vector-icons';
 import Events from "../../screens/Events";
 import EventInfo from "../../screens/EventInfo";
 import UserProfileScreen from '../../screens/UserProfileScreen';
+import QrReaderScreen from '../../screens/QrReaderScreen';
 
 const Tab = createBottomTabNavigator();
 
 //Screen names
 const detailsName = "EventsList";
 const eventInfoName = "SeeEvent";
+const readQRsName = "ReadQRs";
 const settingsName = "settingsUser";
 
 export default function HomeStack() {
@@ -54,6 +56,9 @@ export default function HomeStack() {
                 >
                     <Tab.Screen name={detailsName} component={Events} />
                     <Tab.Screen  name={settingsName} component={UserProfileScreen} />
+                    <Tab.Screen name={readQRsName} component={QrReaderScreen} options={
+                        () => ({tabBarButton: () => null,})}
+                    />
                     <Tab.Screen name={eventInfoName} component={EventInfo} options={
                         () => ({tabBarButton: () => null,})}
                     />

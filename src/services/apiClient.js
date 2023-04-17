@@ -128,4 +128,10 @@ export default class apiClient {
     this.call_get(`${BACKEND_HOST}${GET_EVENT_URL}`, {eventId: eventId}, _onResponse, onError);
   }
 
+  // ==========================================SEE EVENT==========================================
+
+  checkValidQR(qrCode, onResponse, onError){
+    onResponse(undefined)
+  }
+
 }
