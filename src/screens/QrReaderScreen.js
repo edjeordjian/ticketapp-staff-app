@@ -4,9 +4,9 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 import { useMainContext } from '../services/contexts/MainContext';
 import apiClient from '../services/apiClient';
-import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import LoadQRManuallyModal from './LoadQRManuallyModal';
 
 export default function QrReaderScreen({ route, navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -53,6 +53,11 @@ export default function QrReaderScreen({ route, navigation }) {
         }
     };
 
+    const handleManualCode = async (result) => {
+        setMessage('Cargando');
+        checkIfQRisValid(result.data)
+    };
+
     if (hasPermission === null) {
         return <Text>Requesting for camera permission</Text>;
     }
@@ -82,11 +87,7 @@ export default function QrReaderScreen({ route, navigation }) {
                         style={{width: '80%', height: 300}}
                     />
                   }
-                {/* Acá va un modal */}
-                <Button textColor={'#ffffff'} outlined>
-                    Ingresar Manual
-                </Button>
-                {/* {scanned && <Button onPress={() => setScanned(false)}>Tap to Scan Again</Button>} */}
+                <LoadQRManuallyModal sendCode={handleManualCode}/>
             </LinearGradient>
         </SafeAreaView>
       );

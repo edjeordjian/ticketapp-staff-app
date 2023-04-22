@@ -1,50 +1,65 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
 import Modal from "react-native-modal";
 import { Button } from "react-native-paper";
 
 export default function LoadQRManuallyModal(props) {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [code, setCode] = useState("");
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
-  const getEvent = async () => {
+  const readCode = async () => {
      toggleModal();
-     props.getEventTicket();
+     props.sendCode({data: code});
   }
 
   return (
-    <View style={{ flex: 1}}>
-      { props.capacity === 0 ?
-        <Button style={styles.btnSoldEvent} disabled>
-          Entradas agotadas
-        </Button>
-        :
-        <Button style={styles.btnGetEvent} textColor={'white'} onPress={toggleModal}>
-         Obtener entrada
+    <View style={{ flex: 0.5}}>
+      <Button style={styles.btnSoldEvent} onPress={() => toggleModal()}>
+          Ingresar Manual
       </Button>
-      }
 
       <Modal isVisible={isModalVisible}>
-        <View style={{ flex: 1, backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-          <Text style={styles.text}>Obtener entrada?</Text>
+        <View style={{ flex: 1, display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+          <View  style={{backgroundColor: 'white', height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={styles.text}>Código Manual</Text>
+            
+            <View
+              style={{
+                backgroundColor: 'white',
+                borderColor: '#1A55D7',
+                borderWidth: 1,
+                width: '80%',
+                marginTop: 10
+              }}>
+            <TextInput
+              editable
+              maxLength={10}
+              onChangeText={text => setCode(text)}
+              value={code}
+              style={{padding: 10}}
+            />
+            </View>
 
-          <View style={styles.btnsRow}>
-            <Button mode="outlined" 
-                    textColor={'black'} 
-                    style={styles.optionsBtn}
-                    onPress={toggleModal}>
-               Cancelar
-            </Button>
-            <Button mode="contained" 
-                     buttonColor={'#1A55D7'} 
-                     textColor={'white'} 
-                     style={styles.optionsBtn}
-                     onPress={getEvent}>
-               Cargar
-            </Button>
+            <View style={styles.btnsRow}>
+              <Button mode="outlined" 
+                      textColor={'black'} 
+                      style={styles.optionsBtn}
+                      onPress={toggleModal}>
+                Cancelar
+              </Button>
+              <Button mode="contained" 
+                      buttonColor={'#1A55D7'} 
+                      textColor={'white'} 
+                      style={styles.optionsBtn}
+                      onPress={readCode}>
+                Leer
+              </Button>
+            </View>
           </View>
         </View>
       </Modal>
@@ -72,12 +87,9 @@ const styles = StyleSheet.create ({
       marginBottom: 15
   },
   btnSoldEvent: {
-    backgroundColor: 'grey',
     width: '90%',
     alignSelf: 'center',
     padding: 2,
-    marginTop: 15,
-    marginBottom: 15
 },
   btnsRow: {
    display: 'flex', 

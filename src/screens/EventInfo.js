@@ -102,9 +102,12 @@ export default function EventInfo({ route, navigation }) {
                     />
             </Text>
 
-            <Button onPress={navigateToReadQrs}>
-                Leer entradas
-            </Button>
+            <Button mode="outlined" 
+                      textColor={'black'} 
+                      style={styles.readBtn}
+                      onPress={navigateToReadQrs}>
+                Leer Entradas
+              </Button>
 
 
         </ScrollView>
@@ -199,5 +202,10 @@ const styles = StyleSheet.create({
         marginTop: 15,
         display: 'flex',
         flexDirection: 'row'
+    },
+    readBtn: {
+        width: '90%',
+        marginLeft: '5%',
+        marginTop: 15
     }
 });
