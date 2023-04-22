@@ -8,7 +8,7 @@ import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function QrReaderScreen() {
+export default function QrReaderScreen({ route, navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
     const [message, setMessage] = useState('');
     const [scanned, setScanned] = useState(false);
@@ -32,15 +32,16 @@ export default function QrReaderScreen() {
     const checkIfQRisValid = async (qrCode) => {
         const onResponse = (response) => {
             setLoading(false);
-            setMessage(`Bar code successful`);
+            setMessage(`Bar code successfully read`);
         }
 
         const onError = (error) => {
-            alert(error);
+            const mensaje = error.response.data.error;
+            setMessage(mensaje);
         }
         setLoading(true);
         const client = new apiClient(userData.token);
-        client.checkValidQR(qrCode, onResponse, onError);
+        client.checkValidateQR(route.params.eventId, qrCode, onResponse, onError);
     }
 
     const handleBarCodeScanned = async (result) => {

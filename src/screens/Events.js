@@ -24,8 +24,10 @@ export default function Events({ navigation }) {
         const onError = (error) => {
             console.log(error);
         }
+
         getUserData((data) => {
             setUserData(data);
+            console.log(data);
             const client = new apiClient(data.token);
             client.getEventsList(onResponse, onError, data.id);
         });

@@ -103,7 +103,7 @@ export default function EventInfo({ route, navigation }) {
             </Text>
 
             <Button onPress={navigateToReadQrs}>
-                Hola
+                Leer entradas
             </Button>
 
 
