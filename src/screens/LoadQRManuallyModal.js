@@ -29,21 +29,20 @@ export default function LoadQRManuallyModal(props) {
 
       <Modal isVisible={isModalVisible}>
         <View style={{ flex: 1, backgroundColor: 'white', display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-          <Text style={styles.text}>Obtener entrada?</Text>
+          <Text style={styles.text}>¿Obtener entrada?</Text>
 
           <View style={styles.btnsRow}>
             <Button mode="outlined" 
                     textColor={'black'} 
                     style={styles.optionsBtn}
-                    onPress={toggleModal}>
-               Cancelar
+                    onPress={toggleModal}>Cancelar
             </Button>
+
             <Button mode="contained" 
                      buttonColor={'#1A55D7'} 
                      textColor={'white'} 
                      style={styles.optionsBtn}
-                     onPress={getEvent}>
-               Cargar
+                     onPress={getEvent}>Cargar
             </Button>
           </View>
         </View>

@@ -41,7 +41,7 @@ export default function HomeStack() {
                     if (rn === detailsName || rn === eventInfoName) {
                     iconName = 'list'
                     } else if (rn === settingsName) {
-                    iconName = 'user';
+                    iconName = 'log-out';
                     }
 
                     if (!focused) {
