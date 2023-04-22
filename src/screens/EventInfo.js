@@ -5,23 +5,26 @@ import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '../services/apiClient';
 import { useMainContext } from '../services/contexts/MainContext';
-import CarouselCards from '../components/Carousel';
 import RenderHtml from 'react-native-render-html';
-import Agenda from '../components/Agenda';
 import EventInfoLoading from './EventInfoLoading';
 import {BlankLine} from "../components/BlankLine";
+import { Button } from 'react-native-paper';
 
 
 export default function EventInfo({ route, navigation }) {
     const [imageSelected, setImageToShow] = useState(0);
-
     const [event, setEvent] = useState({});
-
     const { getUserData } = useMainContext();
-
     const { width } = useWindowDimensions();
 
     const [currentEventId, setCurrentEventId] = useState(-1);
+
+    const navigateToReadQrs = () => {
+        navigation.navigate('ReadQRs', {
+            'eventId': event.id
+        });
+    }
+
 
     useEffect(() => {
         const onResponse = (response) => {
@@ -86,22 +89,6 @@ export default function EventInfo({ route, navigation }) {
                 </View>
             </View>
 
-            {event.labels ?
-                <View style={styles.labelsRow}>
-                    {event.labels.map((e,i) => {
-                        return (
-                            <View style={styles.labelContainer} key={i}>
-                                <Text style={styles.label}>
-                                    {e}
-                                </Text>
-                            </View>
-                        );
-                    })}
-                </View>
-                :
-                <></>
-            }
-
             <BlankLine/>
 
             <Text style={styles.subtitle}>
@@ -115,30 +102,11 @@ export default function EventInfo({ route, navigation }) {
                     />
             </Text>
 
-            <BlankLine/>
+            <Button onPress={navigateToReadQrs}>
+                Leer entradas
+            </Button>
 
-            <Text style={styles.subtitle}>Organizador
-            </Text>
 
-            <Text>
-                {"     " + event.organizerName}
-            </Text>
-
-            <BlankLine/>
-
-            {/* <Text style={styles.subtitle}>
-                Galeria
-            </Text>
-            {event.imagesUri ?
-                <CarouselCards images={event.imagesUri.map((url,_) => {return {imgUrl: url}})}/>
-                :
-                <></>
-            } */}
-            <Text style={styles.subtitle}>
-                Agenda
-            </Text>
-
-            <Agenda agendaEntries={event.agendaEntries}/>
         </ScrollView>
         </SafeAreaView>
     )

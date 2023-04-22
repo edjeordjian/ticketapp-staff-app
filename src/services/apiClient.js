@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BACKEND_HOST } from "../constants/generalConstants";
-import { SIGN_IN_URL, GET_EVENT_URL, GET_EVENTS_URL } from "../constants/URLs";
+import { SIGN_IN_URL, GET_EVENT_URL, GET_EVENTS_URL, CHECK_EVENT_URL } from "../constants/URLs";
 import EventListResponse from "./responses/EventListResponse";
 import EventResponse from "./responses/EventResponse";
 
@@ -106,26 +106,24 @@ export default class apiClient {
 
   // ==========================================USER SEARCH==========================================
 
-  getEventsList(onResponse, onError, query, owner) {
-    //onResponse(new EventListResponse({'events': []}));
-    //return;
+  getEventsList(onResponse, onError, userId) {
     const _onResponse = (res) => {onResponse( new EventListResponse(res.data))}
-    let params = {}
-    if (query) {
-      params.value = query;
-    }
-    if (owner) {
-      params.owner = owner;
-    }
-    this.call_get(`${BACKEND_HOST}${GET_EVENTS_URL}`, params, _onResponse, onError);
+    this.call_get(`${BACKEND_HOST}${GET_EVENTS_URL}`, {staff:userId}, _onResponse, onError);
   }
 
   // ==========================================SEE EVENT==========================================
 
   getEventInfo(eventId, onResponse, onError) {
-    //onResponse(new EventResponse({}));
     const _onResponse = (res) => {onResponse( new EventResponse(res.data))}
     this.call_get(`${BACKEND_HOST}${GET_EVENT_URL}`, {eventId: eventId}, _onResponse, onError);
+  }
+
+  // ==========================================SEE EVENT==========================================
+
+  checkValidateQR(eventId, qrCode, onResponse, onError){
+    onResponse(undefined);
+    const _onResponse = (res) => {onResponse( new EventResponse(res.data))}
+    this.call_post(`${BACKEND_HOST}${CHECK_EVENT_URL}`, {eventId: eventId, eventCode: qrCode}, _onResponse, onError);
   }
 
 }
