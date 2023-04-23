@@ -57,10 +57,10 @@ export default function HomeStack() {
                     <Tab.Screen name={detailsName} component={Events} />
                     <Tab.Screen  name={settingsName} component={UserProfileScreen} />
                     <Tab.Screen name={readQRsName} component={QrReaderScreen} options={
-                        () => ({tabBarButton: () => null,})}
+                        () => ({tabBarButton: () => null, unmountOnBlur: true})}
                     />
                     <Tab.Screen name={eventInfoName} component={EventInfo} options={
-                        () => ({tabBarButton: () => null,})}
+                        () => ({tabBarButton: () => null, unmountOnBlur: true})}
                     />
             </Tab.Navigator>
     );

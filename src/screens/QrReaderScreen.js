@@ -4,9 +4,10 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 import { useMainContext } from '../services/contexts/MainContext';
 import apiClient from '../services/apiClient';
-import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import LoadQRManuallyModal from './LoadQRManuallyModal';
+import {BlankLine} from "../components/BlankLine";
 
 export default function QrReaderScreen({ route, navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -30,15 +31,18 @@ export default function QrReaderScreen({ route, navigation }) {
     }, []);
 
     const checkIfQRisValid = async (qrCode) => {
+        setMessage(``);
+
         const onResponse = (response) => {
             setLoading(false);
-            setMessage(`Bar code successfully read`);
+            setMessage(`ENTRADA CORRECTA`);
         }
 
         const onError = (error) => {
             const mensaje = error.response.data.error;
             setMessage(mensaje);
         }
+
         setLoading(true);
         const client = new apiClient(userData.token);
         client.checkValidateQR(route.params.eventId, qrCode, onResponse, onError);
@@ -53,12 +57,17 @@ export default function QrReaderScreen({ route, navigation }) {
         }
     };
 
+    const handleManualCode = async (result) => {
+        setMessage('Cargando');
+        await checkIfQRisValid(result.data)
+    };
+
     if (hasPermission === null) {
-        return <Text>Requesting for camera permission</Text>;
+        return <Text>Solicitando permisos para la camara</Text>;
     }
 
     if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+        return <Text>No hay permisos para la camara</Text>;
     }
 
     return (
@@ -69,7 +78,7 @@ export default function QrReaderScreen({ route, navigation }) {
                 end={{ x: 1, y: 1 }}
                 style={styles.container}
             >
-                <Text style={styles.title}>Lee el QR</Text>
+                <Text style={styles.title}>Leer QR - {route.params.eventName}</Text>
                 <View style={styles.messageContainer}>
                     <Text>{message}</Text>
                 </View>
@@ -82,11 +91,19 @@ export default function QrReaderScreen({ route, navigation }) {
                         style={{width: '80%', height: 300}}
                     />
                   }
-                {/* Acá va un modal */}
-                <Button textColor={'#ffffff'} outlined>
-                    Ingresar Manual
-                </Button>
-                {/* {scanned && <Button onPress={() => setScanned(false)}>Tap to Scan Again</Button>} */}
+                <LoadQRManuallyModal sendCode={handleManualCode}/>
+
+                {
+                    (message && message === "ENTRADA CORRECTA") ?
+                    (<Text style={styles.bigText}>✅</Text>) :
+                    (<BlankLine/>)
+                }
+
+                {
+                    (message && message !== "ENTRADA CORRECTA")  ?
+                    (<Text style={styles.bigText}>❌</Text>) :
+                    (<BlankLine/>)
+                }
             </LinearGradient>
         </SafeAreaView>
       );
@@ -104,6 +121,9 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontWeight: 700,
         fontSize: 18
+    },
+    bigText: {
+        fontSize: 40
     },
     messageContainer: {
         backgroundColor: '#ffffff', 

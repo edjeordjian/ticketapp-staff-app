@@ -120,8 +120,7 @@ export default class apiClient {
 
   // ==========================================SEE EVENT==========================================
 
-  checkValidateQR(eventId, qrCode, onResponse, onError){
-    onResponse(undefined);
+  checkValidateQR(eventId, qrCode, onResponse, onError) {
     const _onResponse = (res) => {onResponse( new EventResponse(res.data))}
     this.call_post(`${BACKEND_HOST}${CHECK_EVENT_URL}`, {eventId: eventId, eventCode: qrCode}, _onResponse, onError);
   }
