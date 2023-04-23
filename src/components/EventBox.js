@@ -6,7 +6,8 @@ export default function EventBox(props) {
 
     const navigateToEvent = () => {
         props.navigation.navigate('SeeEvent', {
-            'eventId': event.id
+            'eventId': event.id,
+            'eventName': event.name
         });
     }
 

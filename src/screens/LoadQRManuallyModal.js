@@ -19,15 +19,14 @@ export default function LoadQRManuallyModal(props) {
 
   return (
     <View style={{ flex: 0.5}}>
-      <Button style={styles.btnSoldEvent} onPress={() => toggleModal()}>
-          Ingresar Manual
+      <Button style={styles.btnSoldEvent} onPress={() => toggleModal()}>Ingresar manualmente
       </Button>
 
       <Modal isVisible={isModalVisible}>
         <View style={{ flex: 1, display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
           <View  style={{backgroundColor: 'white', height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
             <Text style={styles.text}>Código Manual</Text>
-            
+
             <View
               style={{
                 backgroundColor: 'white',
@@ -46,15 +45,15 @@ export default function LoadQRManuallyModal(props) {
             </View>
 
             <View style={styles.btnsRow}>
-              <Button mode="outlined" 
-                      textColor={'black'} 
+              <Button mode="outlined"
+                      textColor={'black'}
                       style={styles.optionsBtn}
                       onPress={toggleModal}>
                 Cancelar
               </Button>
-              <Button mode="contained" 
-                      buttonColor={'#1A55D7'} 
-                      textColor={'white'} 
+              <Button mode="contained"
+                      buttonColor={'#1A55D7'}
+                      textColor={'white'}
                       style={styles.optionsBtn}
                       onPress={readCode}>
                 Leer
@@ -89,7 +88,7 @@ const styles = StyleSheet.create ({
   btnSoldEvent: {
     width: '90%',
     alignSelf: 'center',
-    padding: 2,
+    padding: 2
 },
   btnsRow: {
    display: 'flex', 

@@ -21,7 +21,8 @@ export default function EventInfo({ route, navigation }) {
 
     const navigateToReadQrs = () => {
         navigation.navigate('ReadQRs', {
-            'eventId': event.id
+            'eventId': event.id,
+            'eventName': event.name
         });
     }
 
