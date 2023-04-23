@@ -4,6 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 import { useMainContext } from '../services/contexts/MainContext';
 import apiClient from '../services/apiClient';
+import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import LoadQRManuallyModal from './LoadQRManuallyModal';

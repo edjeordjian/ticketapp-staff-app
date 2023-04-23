@@ -88,7 +88,7 @@ const styles = StyleSheet.create ({
   btnSoldEvent: {
     width: '90%',
     alignSelf: 'center',
-    padding: 2,
+    padding: 2
 },
   btnsRow: {
    display: 'flex', 
