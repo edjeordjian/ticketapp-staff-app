@@ -85,6 +85,14 @@ export default function App() {
                     const info = await SecureStore.getItemAsync("user-data");
                     const jsonParse = JSON.parse(info);
                     setData(jsonParse);
+                },
+
+                saveToken: async (token) => {
+                    await SecureStore.setItemAsync("token", token);
+                },
+
+                getToken: async (token) => {
+                    return  await SecureStore.getItemAsync("token");
                 }
             } );
         },
