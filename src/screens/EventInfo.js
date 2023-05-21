@@ -9,6 +9,7 @@ import RenderHtml from 'react-native-render-html';
 import EventInfoLoading from './EventInfoLoading';
 import {BlankLine} from "../components/BlankLine";
 import { Button } from 'react-native-paper';
+import ProgressBarTickets from '../components/ProgressBarTickets';
 
 
 export default function EventInfo({ route, navigation }) {
@@ -22,7 +23,9 @@ export default function EventInfo({ route, navigation }) {
     const navigateToReadQrs = () => {
         navigation.navigate('ReadQRs', {
             'eventId': event.id,
-            'eventName': event.name
+            'progressPercentage': event.progressPercentage,
+            'eventName': event.name,
+            'remainingTicketsToRead': event.remainingTicketsToRead
         });
     }
 
@@ -90,8 +93,6 @@ export default function EventInfo({ route, navigation }) {
                 </View>
             </View>
 
-            <BlankLine/>
-
             <Text style={styles.subtitle}>
                 Descripción
             </Text>
@@ -102,6 +103,13 @@ export default function EventInfo({ route, navigation }) {
                     source={{html: event.description}}
                     />
             </Text>
+
+            <View style={styles.progressContainer}>
+                <ProgressBarTickets progressPercentage={0.5}/>
+                <Text style={styles.progressText}>
+                    Quedan {event.remainingTicketsToRead} entradas por leer
+                </Text>
+            </View>
 
             <Button mode="outlined" 
                       textColor={'black'} 
@@ -208,5 +216,15 @@ const styles = StyleSheet.create({
         width: '90%',
         marginLeft: '5%',
         marginTop: 15
+    },
+    progressContainer: {
+        marginTop: 15, 
+        marginBottom: 20, 
+        width: '90%', 
+        marginLeft: '5%',
+        height: 50,
+    },
+    progressText: {
+        marginTop: 8
     }
 });

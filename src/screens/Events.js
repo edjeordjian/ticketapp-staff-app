@@ -1,10 +1,10 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EventBox from '../components/EventBox';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import apiClient from '../services/apiClient';
 import { useMainContext } from '../services/contexts/MainContext';
 import EventBoxPlaceHolder from '../components/EventBoxPlaceHolder';
@@ -15,6 +15,7 @@ export default function Events({ navigation }) {
     const [loading, setIsLoading] = useState(true);
     const [userData, setUserData] = useState({});
     const { getUserData } = useMainContext();
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         const onResponse = (response) => {
@@ -34,6 +35,25 @@ export default function Events({ navigation }) {
 
     }, []);
 
+    const onRefresh = useCallback(() => {
+        const onResponse = (response) => {
+            setEvents(response.events());
+            setRefreshing(false);
+        }
+
+        const onError = (error) => {
+            console.log(error);
+        }
+
+        setRefreshing(true);
+        getUserData((data) => {
+            setUserData(data);
+            const client = new apiClient(data.token);
+            client.getEventsList(onResponse, onError, data.id);
+        });
+
+      }, []);
+
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient
@@ -43,6 +63,12 @@ export default function Events({ navigation }) {
                 style={styles.searchBarContainer}
             />
             <ScrollView 
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
                 contentContainerStyle={{ flexGrow: 1, alignItems: 'center'}}
                 style={styles.scrollContainer}>
                 {loading ? 

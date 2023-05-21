@@ -4,11 +4,11 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 import { useMainContext } from '../services/contexts/MainContext';
 import apiClient from '../services/apiClient';
-import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import LoadQRManuallyModal from './LoadQRManuallyModal';
 import {BlankLine} from "../components/BlankLine";
+import ProgressBarTickets from '../components/ProgressBarTickets';
 
 export default function QrReaderScreen({ route, navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -16,6 +16,8 @@ export default function QrReaderScreen({ route, navigation }) {
     const [scanned, setScanned] = useState(false);
     const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState({});
+    const [progress, setProgress] = useState(parseFloat(route.params.progressPercentage));
+    const [remainingTicketsToRead, setRemainingTicketsToRead] = useState(parseFloat(route.params.remainingTicketsToRead));
     const { getUserData } = useMainContext();
 
     useEffect(() => {
@@ -36,6 +38,8 @@ export default function QrReaderScreen({ route, navigation }) {
 
         const onResponse = (response) => {
             setLoading(false);
+            setProgress(response.progress())
+            setRemainingTicketsToRead(response.remainingTicketsToRead())
             setMessage(`ENTRADA CORRECTA`);
         }
 
@@ -79,17 +83,27 @@ export default function QrReaderScreen({ route, navigation }) {
                 end={{ x: 1, y: 1 }}
                 style={styles.container}
             >
-                <Text style={styles.title}>Leer QR - {route.params.eventName}</Text>
-                <View style={styles.messageContainer}>
-                    <Text>{message}</Text>
+                <Text style={styles.title}>Leer QR</Text>
+                <Text style={styles.nameTitle}>{route.params.eventName}</Text>
+                { message ? 
+                    <View style={styles.messageContainer}>
+                        <Text>{message}</Text>
+                    </View> : <></>
+                }
+                <View style={styles.progressContainer}>
+                    <ProgressBarTickets progressPercentage={progress}/>
+                    <Text style={styles.progressText}>
+                        Quedan {remainingTicketsToRead} entradas por leer
+                    </Text>
                 </View>
+
                 {scanned ? 
                   <Text>Loading</Text>
                   :
                   <Camera
                         onBarCodeScanned={handleBarCodeScanned}
                         ratio='16:9'
-                        style={{width: '80%', height: 300}}
+                        style={{width: '80%', height: 300, marginTop: 25}}
                     />
                   }
                 <LoadQRManuallyModal sendCode={handleManualCode}/>
@@ -123,6 +137,12 @@ const styles = StyleSheet.create({
         fontWeight: 700,
         fontSize: 18
     },
+    nameTitle: {
+        color: '#ffffff',
+        fontWeight: 700,
+        fontSize: 18,
+        marginBottom: 15
+    },
     bigText: {
         fontSize: 40
     },
@@ -132,5 +152,18 @@ const styles = StyleSheet.create({
         width: 300,
         margin: 15,
         borderRadius: 5
+    },
+    progressContainer: {
+        marginBottom: 10, 
+        marginTop: 20,
+        width: '80%', 
+        height: 50
+    },
+    progressText: {
+        color: '#B5C7E0',
+        textAlign: 'center',
+        fontSize: 16,
+        marginTop:  8,
+        marginBottom: 8
     }
 });
