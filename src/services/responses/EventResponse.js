@@ -28,6 +28,14 @@ export default class EventResponse {
         }
     }
 
+    progress() {
+        return this._response.progress_percentage;
+    }
+
+    remainingTicketsToRead() {
+        return this._response.remaining_tickets_to_read;
+    }
+
     _parseEvent() {
         const event = this._response;
         console.log(event);
@@ -40,6 +48,8 @@ export default class EventResponse {
             date: event.date,
             labels:  event.types_names,
             imagesUri: event.pictures,
+            progressPercentage: 0.5,
+            remainingTicketsToRead: 100,
             organizerName: event.organizerName,
             agendaEntries: event.agenda.map((e, i) => {
                 return this._parseAgendaEvents(e, i)
