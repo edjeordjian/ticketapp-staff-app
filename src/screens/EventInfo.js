@@ -115,7 +115,7 @@ export default function EventInfo({ route, navigation }) {
                       textColor={'black'} 
                       style={styles.readBtn}
                       onPress={navigateToReadQrs}>
-                Leer Entradas
+                Escanear Entradas
               </Button>
 
 
