@@ -38,7 +38,6 @@ export default class EventResponse {
 
     _parseEvent() {
         const event = this._response;
-        console.log(event);
         return {
             id: event.id,
             name: event.name,

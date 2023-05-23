@@ -8,7 +8,6 @@ import LineChartEntries from '../components/LineChartEntries';
 
 
 export default function StatsScreen({ route, navigation }) {
-    const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState({});
     const [stats, setStats] = useState(undefined);
     const { getUserData } = useMainContext();
@@ -25,26 +24,7 @@ export default function StatsScreen({ route, navigation }) {
         getUserData((data) => {
             const client = new apiClient(data.token);
             setUserData(data);
-            const abc={
-                labels: ["17:35", "17:40", "17:45", "17:50", "18:15"],
-                datasets: [
-                  {
-                    data: [
-                      5,
-                      1,
-                      8,
-                      12,
-                      1,
-                      5,
-                      7,
-                      2,
-                      9
-                    ]
-                  }
-                ]
-            }
-            setStats(abc)
-            //client.getStats(route.params.eventId, onResponse, onError);
+            client.getStats(route.params.eventId, onResponse, onError);
         });
 
     }, [route.params.eventId]);
