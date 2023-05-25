@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, Text, Dimensions, StyleSheet} from 'react-native';
-import {Grid, LineChart, XAxis, YAxis} from 'react-native-svg-charts';
+import {Grid, LineChart, XAxis, YAxis, } from 'react-native-svg-charts';
 import {BlankLine} from "./BlankLine";
+import {Circle} from "react-native-svg";
 
 
 export default function LineChartEntries({chartData, fillShadowGradient}) {
@@ -38,13 +39,17 @@ export default function LineChartEntries({chartData, fillShadowGradient}) {
                 <View style={{flex: 0.9}}>
                     <LineChart
                         style={{
-                            width: 330,
+                            width: 390,
                             height: 300,
                             paddingLeft: 30,
                             paddingRight: 30
                         }}
                         data={chartData.data}
-                        svg={{ stroke: 'rgb(134, 65, 244)' }}
+                        svg={{
+                            stroke: 'rgb(134, 65, 244)',
+                            strokeWidth: 2,
+                            strokeLinecap: 'round'
+                        }}
                         contentInset={{
                             top: 20,
                             bottom: 20,
@@ -53,6 +58,23 @@ export default function LineChartEntries({chartData, fillShadowGradient}) {
                         }}
                     >
                         <Grid />
+
+                        {chartData.data.map((value, index) => (
+                            <Circle
+                                key={index}
+                                cx={index * ((330 - 30 - 30) / (chartData.data.length - 1)) + 28}
+                                cy={300 - (
+                                        (value - Math.min(...chartData.data))
+                                        / (
+                                            Math.max(...chartData.data) - Math.min(...chartData.data)
+                                        )
+                                    ) * (300 - 20 - 20) - 20
+                                }
+                                r={4}
+                                stroke="blue"
+                                fill="blue"
+                            />
+                        ))}
                     </LineChart>
                 </View>
             </View>
