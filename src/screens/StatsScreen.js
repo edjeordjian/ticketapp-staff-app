@@ -26,7 +26,6 @@ export default function StatsScreen({ route, navigation }) {
             setUserData(data);
             client.getStats(route.params.eventId, onResponse, onError);
         });
-
     }, [route.params.eventId]);
 
     const navigateToEvent = () => {

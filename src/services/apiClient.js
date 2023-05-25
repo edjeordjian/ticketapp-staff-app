@@ -129,10 +129,8 @@ export default class apiClient {
   // ==========================================GET STATS==========================================
 
   getStats(eventId, onResponse, onError) {
-    onResponse(new StatsResponse({}));
-    return;
     const _onResponse = (res) => {onResponse( new StatsResponse(res.data))}
-    this.call_call_getpost(`${BACKEND_HOST}${STATS_URL}`, {eventId: eventId}, _onResponse, onError);
+    this.call_get(`${BACKEND_HOST}${STATS_URL}`, {eventId: eventId}, _onResponse, onError);
   }
 
 }
