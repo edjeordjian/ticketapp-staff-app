@@ -3,3 +3,4 @@ export const SIGN_IN_URL = "/signin";
 export const GET_EVENT_URL = "/event";
 export const GET_EVENTS_URL = "/event/all";
 export const CHECK_EVENT_URL = "/event/check";
+export const STATS_URL = "/event/attendances/range";

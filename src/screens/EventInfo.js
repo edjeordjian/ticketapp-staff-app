@@ -1,4 +1,5 @@
 import { StyleSheet, Text, Image, View, useWindowDimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
@@ -7,7 +8,6 @@ import apiClient from '../services/apiClient';
 import { useMainContext } from '../services/contexts/MainContext';
 import RenderHtml from 'react-native-render-html';
 import EventInfoLoading from './EventInfoLoading';
-import {BlankLine} from "../components/BlankLine";
 import { Button } from 'react-native-paper';
 import ProgressBarTickets from '../components/ProgressBarTickets';
 
@@ -29,6 +29,11 @@ export default function EventInfo({ route, navigation }) {
         });
     }
 
+    const navigateToStats = () => {
+        navigation.navigate('StatsView', {
+            'eventId': event.id,
+        });
+    }
 
     useEffect(() => {
         const onResponse = (response) => {
@@ -73,9 +78,16 @@ export default function EventInfo({ route, navigation }) {
                 <></>
             }
 
-            <Text style={styles.title}>
-                {event.name}
-            </Text>
+            <View style={styles.itemsContainer}>
+                <Text style={styles.title}>
+                    {event.name}
+                </Text>
+                <TouchableOpacity
+                    onPress={navigateToStats}
+                    style={styles.shareBtn}>
+                    <Ionicons name="stats-chart" size={20} color="white" />
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.infoContainer}>
                 <View style={styles.infoPlaceContainer}>
@@ -226,5 +238,22 @@ const styles = StyleSheet.create({
     },
     progressText: {
         marginTop: 8
+    },
+    shareBtn: {
+        backgroundColor: '#A5C91B', 
+        marginRight: 10, 
+        height: 40, 
+        width: 40,
+        borderRadius: 20,
+        display: 'flex', 
+        justifyContent:'center',
+        alignItems: 'center'
+    },
+    itemsContainer: {
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        flexDirection: 'row', 
+        alignContent: 'center',
+        alignItems: 'center'
     }
 });

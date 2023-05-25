@@ -1,8 +1,9 @@
 import axios from "axios";
 import { BACKEND_HOST } from "../constants/generalConstants";
-import { SIGN_IN_URL, GET_EVENT_URL, GET_EVENTS_URL, CHECK_EVENT_URL } from "../constants/URLs";
+import { SIGN_IN_URL, GET_EVENT_URL, GET_EVENTS_URL, CHECK_EVENT_URL, STATS_URL } from "../constants/URLs";
 import EventListResponse from "./responses/EventListResponse";
 import EventResponse from "./responses/EventResponse";
+import StatsResponse from "./responses/StatsResponse";
 
 export default class apiClient {
   constructor(token) {
@@ -123,6 +124,15 @@ export default class apiClient {
   checkValidateQR(eventId, qrCode, onResponse, onError) {
     const _onResponse = (res) => {onResponse( new EventResponse(res.data))}
     this.call_post(`${BACKEND_HOST}${CHECK_EVENT_URL}`, {eventId: eventId, eventCode: qrCode}, _onResponse, onError);
+  }
+
+  // ==========================================GET STATS==========================================
+
+  getStats(eventId, onResponse, onError) {
+    onResponse(new StatsResponse({}));
+    return;
+    const _onResponse = (res) => {onResponse( new StatsResponse(res.data))}
+    this.call_call_getpost(`${BACKEND_HOST}${STATS_URL}`, {eventId: eventId}, _onResponse, onError);
   }
 
 }
