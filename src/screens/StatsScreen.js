@@ -5,16 +5,22 @@ import apiClient from '../services/apiClient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'react-native-paper';
 import LineChartEntries from '../components/LineChartEntries';
+import {statsScreenStyle} from "../styles/app/StatsScreenStyle";
 
 
 export default function StatsScreen({ route, navigation }) {
     const [userData, setUserData] = useState({});
     const [stats, setStats] = useState(undefined);
+    const [userEntries, setUserEntries] = useState(undefined);
     const { getUserData } = useMainContext();
 
     useEffect(() => {
         const onResponse = (response) => {
             setStats(response.stats());
+        }
+
+        const onResponse2 = (response) => {
+            setUserEntries(response.data.stats);
         }
 
         const onError = (error) => {
@@ -23,8 +29,14 @@ export default function StatsScreen({ route, navigation }) {
 
         getUserData((data) => {
             const client = new apiClient(data.token);
+
             setUserData(data);
+
             client.getStats(route.params.eventId, onResponse, onError);
+
+            client.getUserStats(route.params.eventId,
+                onResponse2,
+                onError);
         });
     }, [route.params.eventId]);
 
@@ -36,17 +48,18 @@ export default function StatsScreen({ route, navigation }) {
 
     return (
         <SafeAreaView>
-            <Text style={styles.title}>Ingresos en el tiempo</Text>
+            <Text style={statsScreenStyle.title}>Ingresos en el tiempo</Text>
             {stats ? 
                 <LineChartEntries
                     chartData={stats}
+                    userEntries={userEntries}
                     fillShadowGradient="#ccc"
                 />
                 :
                 <></>
             }
             <Button 
-                style={styles.btnGoBack} 
+                style={statsScreenStyle.btnGoBack}
                 textColor={'black'}
                 onPress={navigateToEvent}>
                 Volver
@@ -54,42 +67,3 @@ export default function StatsScreen({ route, navigation }) {
         </SafeAreaView>
       );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        color: '#A5C91B',
-        fontWeight: 700,
-        fontSize: 20,
-        marginVertical: 35,
-        marginLeft: '5%'
-    },
-    nameTitle: {
-        color: '#ffffff',
-        fontWeight: 700,
-        fontSize: 18,
-        marginBottom: 15
-    },
-    messageContainer: {
-        backgroundColor: '#ffffff', 
-        padding: 25,
-        width: 300,
-        margin: 15,
-        borderRadius: 5
-    },
-    btnGoBack: {
-        width: '50%',
-        padding: 2,
-        marginTop: 15,
-        marginBottom: 15,
-        borderWidth: 2,
-        borderColor: '#768395',
-        marginLeft: '5%'
-    },
-});

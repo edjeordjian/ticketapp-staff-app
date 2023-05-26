@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, Text, Dimensions, StyleSheet} from 'react-native';
+import {View, Text, Dimensions, StyleSheet, ScrollView} from 'react-native';
 import {Grid, LineChart, XAxis, YAxis, } from 'react-native-svg-charts';
 import {BlankLine} from "./BlankLine";
 import {Circle} from "react-native-svg";
+import {statsScreenStyle} from "../styles/app/StatsScreenStyle";
 
 
-export default function LineChartEntries({chartData, fillShadowGradient}) {
+export default function LineChartEntries({chartData, userEntries, fillShadowGradient}) {
     const yScale = [...new Set([...chartData.data].sort())];
 
     const xScale = chartData.labels;
@@ -62,7 +63,7 @@ export default function LineChartEntries({chartData, fillShadowGradient}) {
                         {chartData.data.map((value, index) => (
                             <Circle
                                 key={index}
-                                cx={index * ((330 - 30 - 30) / (chartData.data.length - 1)) + 28}
+                                cx={index * ((330 - 30 - 30) / (chartData.data.length - 1)) + 25}
                                 cy={300 - (
                                         (value - Math.min(...chartData.data))
                                         / (
@@ -101,6 +102,20 @@ export default function LineChartEntries({chartData, fillShadowGradient}) {
                 }}
                 formatLabel={(value) => `${xScale[value]}`}
             />
+
+            <BlankLine number={2}/>
+
+            <Text style={statsScreenStyle.title}>Usuarios
+            </Text>
+
+            <ScrollView>
+                    {
+                    userEntries.map((entry, index) => (
+                            <Text>       {entry.time} - {entry.name}
+                            </Text>
+                        ))
+                    }
+            </ScrollView>
 
             <BlankLine number={2}/>
         </View>
