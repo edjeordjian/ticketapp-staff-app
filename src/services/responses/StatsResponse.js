@@ -5,21 +5,11 @@ export default class StatsResponse {
     }
 
     _parseStats() {
-        // Por ahora no sé si le hacemos algo
-        return {
-            labels: ["17:55", "", "", "17:56"],
-            datasets: [
-              {
-                data: [
-                  5,
-                  6,
-                  1,
-                  0
-                ]
-              }
-            ]
+        const stats = {
+            labels: this._response.labels,
+            data: this._response.data
         }
-        const stats = this._response;
+
         return stats;
     }
 

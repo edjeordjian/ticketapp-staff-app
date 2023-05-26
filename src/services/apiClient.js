@@ -1,6 +1,13 @@
 import axios from "axios";
 import { BACKEND_HOST } from "../constants/generalConstants";
-import { SIGN_IN_URL, GET_EVENT_URL, GET_EVENTS_URL, CHECK_EVENT_URL, STATS_URL } from "../constants/URLs";
+import {
+    SIGN_IN_URL,
+    GET_EVENT_URL,
+    GET_EVENTS_URL,
+    CHECK_EVENT_URL,
+    STATS_URL,
+    USER_STATS_URL
+} from "../constants/URLs";
 import EventListResponse from "./responses/EventListResponse";
 import EventResponse from "./responses/EventResponse";
 import StatsResponse from "./responses/StatsResponse";
@@ -88,7 +95,6 @@ export default class apiClient {
   // ==========================================USER SEARCH==========================================
 
   logIn(requestBody, onResponse, onError) {
-    console.log(`${BACKEND_HOST}${SIGN_IN_URL}`);
     axios.post(`${BACKEND_HOST}${SIGN_IN_URL}`, requestBody, {
       headers: {
         'Expo': "true",
@@ -127,12 +133,13 @@ export default class apiClient {
   }
 
   // ==========================================GET STATS==========================================
-
   getStats(eventId, onResponse, onError) {
-    onResponse(new StatsResponse({}));
-    return;
     const _onResponse = (res) => {onResponse( new StatsResponse(res.data))}
-    this.call_call_getpost(`${BACKEND_HOST}${STATS_URL}`, {eventId: eventId}, _onResponse, onError);
+    this.call_get(`${BACKEND_HOST}${STATS_URL}`, {eventId: eventId}, _onResponse, onError);
   }
+
+    getUserStats(eventId, onResponse, onError) {
+        this.call_get(`${BACKEND_HOST}${USER_STATS_URL}`, {eventId: eventId}, onResponse, onError);
+    }
 
 }
