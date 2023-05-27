@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import {Text, View, StyleSheet, ScrollView} from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 import { useMainContext } from '../services/contexts/MainContext';
@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import LoadQRManuallyModal from './LoadQRManuallyModal';
 import {BlankLine} from "../components/BlankLine";
 import ProgressBarTickets from '../components/ProgressBarTickets';
+import EventInfoLoading from "./EventInfoLoading";
 
 export default function QrReaderScreen({ route, navigation }) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -16,8 +17,9 @@ export default function QrReaderScreen({ route, navigation }) {
     const [scanned, setScanned] = useState(false);
     const [loading, setLoading] = useState(false);
     const [userData, setUserData] = useState({});
-    const [progress, setProgress] = useState(parseFloat(route.params.progressPercentage));
-    const [remainingTicketsToRead, setRemainingTicketsToRead] = useState(parseFloat(route.params.remainingTicketsToRead));
+    const [progress, setProgress] = useState(parseFloat(route.params.ticketPercentage));
+    const [ticketFraction, setTicketFraction] = useState(route.params.ticketFraction);
+    const [remainingTicketsToRead, setRemainingTicketsToRead] = useState(parseFloat(route.params.ticketToRead));
     const { getUserData } = useMainContext();
 
     useEffect(() => {
@@ -37,10 +39,11 @@ export default function QrReaderScreen({ route, navigation }) {
         setMessage(``);
 
         const onResponse = (response) => {
-            setLoading(false);
             setProgress(response.progress())
             setRemainingTicketsToRead(response.remainingTicketsToRead())
+            setTicketFraction(response.ticketFraction())
             setMessage(`ENTRADA CORRECTA`);
+            setLoading(false);
         }
 
         const onError = (error) => {
@@ -83,7 +86,6 @@ export default function QrReaderScreen({ route, navigation }) {
                 end={{ x: 1, y: 1 }}
                 style={styles.container}
             >
-                <Text style={styles.title}>Leer QR</Text>
                 <Text style={styles.nameTitle}>{route.params.eventName}</Text>
                 { message ? 
                     <View style={styles.messageContainer}>
@@ -91,9 +93,9 @@ export default function QrReaderScreen({ route, navigation }) {
                     </View> : <></>
                 }
                 <View style={styles.progressContainer}>
-                    <ProgressBarTickets progressPercentage={progress}/>
+                    <ProgressBarTickets progressPercentage={ticketFraction}/>
                     <Text style={styles.progressText}>
-                        Quedan {remainingTicketsToRead} entradas por leer
+                        {remainingTicketsToRead} entradas sin leer ({progress}%)
                     </Text>
                 </View>
 
