@@ -63,7 +63,7 @@ export default function LineChartEntries({chartData, userEntries, fillShadowGrad
                         {chartData.data.map((value, index) => (
                             <Circle
                                 key={index}
-                                cx={index * ((330 - 30 - 30) / (chartData.data.length - 1)) + 25}
+                                cx={index * ((330 - 26 - 26) / (chartData.data.length - 1)) + 23}
                                 cy={300 - (
                                         (value - Math.min(...chartData.data))
                                         / (
