@@ -39,6 +39,8 @@ export default function QrReaderScreen({ route, navigation }) {
         setMessage(``);
 
         const onResponse = (response) => {
+            console.log(response);
+
             setProgress(response.progress())
             setRemainingTicketsToRead(response.remainingTicketsToRead())
             setTicketFraction(response.ticketFraction())

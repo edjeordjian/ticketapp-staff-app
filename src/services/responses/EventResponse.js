@@ -36,7 +36,7 @@ export default class EventResponse {
     }
 
     remainingTicketsToRead() {
-        return this._response.remaining_tickets_to_read;
+        return this._response.ticket_to_read;
     }
 
     ticketFraction() {
