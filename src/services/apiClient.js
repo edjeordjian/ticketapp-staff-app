@@ -122,7 +122,12 @@ export default class apiClient {
 
   getEventInfo(eventId, onResponse, onError) {
     const _onResponse = (res) => {onResponse( new EventResponse(res.data))}
-    this.call_get(`${BACKEND_HOST}${GET_EVENT_URL}`, {eventId: eventId}, _onResponse, onError);
+    this.call_get(`${BACKEND_HOST}${GET_EVENT_URL}`, {
+            eventId: eventId,
+            with_percentage: true
+        },
+        _onResponse,
+        onError);
   }
 
   // ==========================================SEE EVENT==========================================

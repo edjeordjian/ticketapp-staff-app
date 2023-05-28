@@ -23,9 +23,10 @@ export default function EventInfo({ route, navigation }) {
     const navigateToReadQrs = () => {
         navigation.navigate('ReadQRs', {
             'eventId': event.id,
-            'progressPercentage': event.progressPercentage,
-            'eventName': event.name,
-            'remainingTicketsToRead': event.remainingTicketsToRead
+            'ticketPercentage': event.ticketPercentage,
+            'ticketFraction': event.ticketFraction,
+            'ticketToRead': event.ticketToRead,
+            'eventName': event.name
         });
     }
 
@@ -117,9 +118,9 @@ export default function EventInfo({ route, navigation }) {
             </Text>
 
             <View style={styles.progressContainer}>
-                <ProgressBarTickets progressPercentage={0.5}/>
+                <ProgressBarTickets progressPercentage={event.ticketFraction}/>
                 <Text style={styles.progressText}>
-                    Quedan {event.remainingTicketsToRead} entradas por leer
+                     {event.ticketToRead} entradas sin leer ({event.ticketPercentage}%)
                 </Text>
             </View>
 
