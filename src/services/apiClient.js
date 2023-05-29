@@ -1,8 +1,16 @@
 import axios from "axios";
 import { BACKEND_HOST } from "../constants/generalConstants";
-import { SIGN_IN_URL, GET_EVENT_URL, GET_EVENTS_URL } from "../constants/URLs";
+import {
+    SIGN_IN_URL,
+    GET_EVENT_URL,
+    GET_EVENTS_URL,
+    CHECK_EVENT_URL,
+    STATS_URL,
+    USER_STATS_URL
+} from "../constants/URLs";
 import EventListResponse from "./responses/EventListResponse";
 import EventResponse from "./responses/EventResponse";
+import StatsResponse from "./responses/StatsResponse";
 
 export default class apiClient {
   constructor(token) {
@@ -87,7 +95,6 @@ export default class apiClient {
   // ==========================================USER SEARCH==========================================
 
   logIn(requestBody, onResponse, onError) {
-    console.log(`${BACKEND_HOST}${SIGN_IN_URL}`);
     axios.post(`${BACKEND_HOST}${SIGN_IN_URL}`, requestBody, {
       headers: {
         'Expo': "true",
@@ -106,26 +113,38 @@ export default class apiClient {
 
   // ==========================================USER SEARCH==========================================
 
-  getEventsList(onResponse, onError, query, owner) {
-    //onResponse(new EventListResponse({'events': []}));
-    //return;
+  getEventsList(onResponse, onError, userId) {
     const _onResponse = (res) => {onResponse( new EventListResponse(res.data))}
-    let params = {}
-    if (query) {
-      params.value = query;
-    }
-    if (owner) {
-      params.owner = owner;
-    }
-    this.call_get(`${BACKEND_HOST}${GET_EVENTS_URL}`, params, _onResponse, onError);
+    this.call_get(`${BACKEND_HOST}${GET_EVENTS_URL}`, {staff:userId}, _onResponse, onError);
   }
 
   // ==========================================SEE EVENT==========================================
 
   getEventInfo(eventId, onResponse, onError) {
-    //onResponse(new EventResponse({}));
     const _onResponse = (res) => {onResponse( new EventResponse(res.data))}
-    this.call_get(`${BACKEND_HOST}${GET_EVENT_URL}`, {eventId: eventId}, _onResponse, onError);
+    this.call_get(`${BACKEND_HOST}${GET_EVENT_URL}`, {
+            eventId: eventId,
+            with_percentage: true
+        },
+        _onResponse,
+        onError);
   }
+
+  // ==========================================SEE EVENT==========================================
+
+  checkValidateQR(eventId, qrCode, onResponse, onError) {
+    const _onResponse = (res) => {onResponse( new EventResponse(res.data))}
+    this.call_post(`${BACKEND_HOST}${CHECK_EVENT_URL}`, {eventId: eventId, eventCode: qrCode}, _onResponse, onError);
+  }
+
+  // ==========================================GET STATS==========================================
+  getStats(eventId, onResponse, onError) {
+    const _onResponse = (res) => {onResponse( new StatsResponse(res.data))}
+    this.call_get(`${BACKEND_HOST}${STATS_URL}`, {eventId: eventId}, _onResponse, onError);
+  }
+
+    getUserStats(eventId, onResponse, onError) {
+        this.call_get(`${BACKEND_HOST}${USER_STATS_URL}`, {eventId: eventId}, onResponse, onError);
+    }
 
 }

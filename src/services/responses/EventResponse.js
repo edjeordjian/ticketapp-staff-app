@@ -1,3 +1,6 @@
+import ProgressBarTickets from "../../components/ProgressBarTickets";
+import {Text, View} from "react-native";
+import React from "react";
 
 export default class EventResponse {
     constructor(response) {
@@ -28,9 +31,23 @@ export default class EventResponse {
         }
     }
 
+    progress() {
+        return this._response.ticket_percentage;
+    }
+
+    remainingTicketsToRead() {
+        return this._response.ticket_to_read;
+    }
+
+    ticketFraction() {
+        return this._response.ticket_fraction;
+    }
+
     _parseEvent() {
         const event = this._response;
+
         console.log(event);
+
         return {
             id: event.id,
             name: event.name,
@@ -40,6 +57,9 @@ export default class EventResponse {
             date: event.date,
             labels:  event.types_names,
             imagesUri: event.pictures,
+            ticketPercentage: event.ticket_percentage,
+            ticketFraction: event.ticket_fraction,
+            ticketToRead: event.ticket_to_read,
             organizerName: event.organizerName,
             agendaEntries: event.agenda.map((e, i) => {
                 return this._parseAgendaEvents(e, i)

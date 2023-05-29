@@ -1,27 +1,40 @@
 import { StyleSheet, Text, Image, View, useWindowDimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import apiClient from '../services/apiClient';
 import { useMainContext } from '../services/contexts/MainContext';
-import CarouselCards from '../components/Carousel';
 import RenderHtml from 'react-native-render-html';
-import Agenda from '../components/Agenda';
 import EventInfoLoading from './EventInfoLoading';
-import {BlankLine} from "../components/BlankLine";
+import { Button } from 'react-native-paper';
+import ProgressBarTickets from '../components/ProgressBarTickets';
 
 
 export default function EventInfo({ route, navigation }) {
     const [imageSelected, setImageToShow] = useState(0);
-
     const [event, setEvent] = useState({});
-
     const { getUserData } = useMainContext();
-
     const { width } = useWindowDimensions();
 
     const [currentEventId, setCurrentEventId] = useState(-1);
+
+    const navigateToReadQrs = () => {
+        navigation.navigate('ReadQRs', {
+            'eventId': event.id,
+            'ticketPercentage': event.ticketPercentage,
+            'ticketFraction': event.ticketFraction,
+            'ticketToRead': event.ticketToRead,
+            'eventName': event.name
+        });
+    }
+
+    const navigateToStats = () => {
+        navigation.navigate('StatsView', {
+            'eventId': event.id,
+        });
+    }
 
     useEffect(() => {
         const onResponse = (response) => {
@@ -66,9 +79,16 @@ export default function EventInfo({ route, navigation }) {
                 <></>
             }
 
-            <Text style={styles.title}>
-                {event.name}
-            </Text>
+            <View style={styles.itemsContainer}>
+                <Text style={styles.title}>
+                    {event.name}
+                </Text>
+                <TouchableOpacity
+                    onPress={navigateToStats}
+                    style={styles.shareBtn}>
+                    <Ionicons name="stats-chart" size={20} color="white" />
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.infoContainer}>
                 <View style={styles.infoPlaceContainer}>
@@ -86,24 +106,6 @@ export default function EventInfo({ route, navigation }) {
                 </View>
             </View>
 
-            {event.labels ?
-                <View style={styles.labelsRow}>
-                    {event.labels.map((e,i) => {
-                        return (
-                            <View style={styles.labelContainer} key={i}>
-                                <Text style={styles.label}>
-                                    {e}
-                                </Text>
-                            </View>
-                        );
-                    })}
-                </View>
-                :
-                <></>
-            }
-
-            <BlankLine/>
-
             <Text style={styles.subtitle}>
                 Descripción
             </Text>
@@ -115,30 +117,21 @@ export default function EventInfo({ route, navigation }) {
                     />
             </Text>
 
-            <BlankLine/>
+            <View style={styles.progressContainer}>
+                <ProgressBarTickets progressPercentage={event.ticketFraction}/>
+                <Text style={styles.progressText}>
+                     {event.ticketToRead} entradas sin leer ({event.ticketPercentage}%)
+                </Text>
+            </View>
 
-            <Text style={styles.subtitle}>Organizador
-            </Text>
+            <Button mode="outlined" 
+                      textColor={'black'} 
+                      style={styles.readBtn}
+                      onPress={navigateToReadQrs}>
+                Escanear Entradas
+              </Button>
 
-            <Text>
-                {"     " + event.organizerName}
-            </Text>
 
-            <BlankLine/>
-
-            {/* <Text style={styles.subtitle}>
-                Galeria
-            </Text>
-            {event.imagesUri ?
-                <CarouselCards images={event.imagesUri.map((url,_) => {return {imgUrl: url}})}/>
-                :
-                <></>
-            } */}
-            <Text style={styles.subtitle}>
-                Agenda
-            </Text>
-
-            <Agenda agendaEntries={event.agendaEntries}/>
         </ScrollView>
         </SafeAreaView>
     )
@@ -231,5 +224,37 @@ const styles = StyleSheet.create({
         marginTop: 15,
         display: 'flex',
         flexDirection: 'row'
+    },
+    readBtn: {
+        width: '90%',
+        marginLeft: '5%',
+        marginTop: 15
+    },
+    progressContainer: {
+        marginTop: 15, 
+        marginBottom: 20, 
+        width: '90%', 
+        marginLeft: '5%',
+        height: 50,
+    },
+    progressText: {
+        marginTop: 8
+    },
+    shareBtn: {
+        backgroundColor: '#A5C91B', 
+        marginRight: 10, 
+        height: 40, 
+        width: 40,
+        borderRadius: 20,
+        display: 'flex', 
+        justifyContent:'center',
+        alignItems: 'center'
+    },
+    itemsContainer: {
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        flexDirection: 'row', 
+        alignContent: 'center',
+        alignItems: 'center'
     }
 });

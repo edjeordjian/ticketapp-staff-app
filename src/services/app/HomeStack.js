@@ -4,12 +4,16 @@ import { Feather } from '@expo/vector-icons';
 import Events from "../../screens/Events";
 import EventInfo from "../../screens/EventInfo";
 import UserProfileScreen from '../../screens/UserProfileScreen';
+import QrReaderScreen from '../../screens/QrReaderScreen';
+import StatsScreen from '../../screens/StatsScreen';
 
 const Tab = createBottomTabNavigator();
 
 //Screen names
 const detailsName = "EventsList";
 const eventInfoName = "SeeEvent";
+const readQRsName = "ReadQRs";
+const statsName = "StatsView";
 const settingsName = "settingsUser";
 
 export default function HomeStack() {
@@ -39,7 +43,7 @@ export default function HomeStack() {
                     if (rn === detailsName || rn === eventInfoName) {
                     iconName = 'list'
                     } else if (rn === settingsName) {
-                    iconName = 'user';
+                    iconName = 'log-out';
                     }
 
                     if (!focused) {
@@ -54,8 +58,14 @@ export default function HomeStack() {
                 >
                     <Tab.Screen name={detailsName} component={Events} />
                     <Tab.Screen  name={settingsName} component={UserProfileScreen} />
+                    <Tab.Screen name={readQRsName} component={QrReaderScreen} options={
+                        () => ({tabBarButton: () => null, unmountOnBlur: true})}
+                    />
                     <Tab.Screen name={eventInfoName} component={EventInfo} options={
-                        () => ({tabBarButton: () => null,})}
+                        () => ({tabBarButton: () => null, unmountOnBlur: true})}
+                    />
+                    <Tab.Screen name={statsName} component={StatsScreen} options={
+                        () => ({tabBarButton: () => null, unmountOnBlur: true})}
                     />
             </Tab.Navigator>
     );

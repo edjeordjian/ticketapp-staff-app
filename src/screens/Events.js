@@ -1,11 +1,10 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import EventBox from '../components/EventBox';
-import { SearchBar } from '@rneui/themed';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import apiClient from '../services/apiClient';
 import { useMainContext } from '../services/contexts/MainContext';
 import EventBoxPlaceHolder from '../components/EventBoxPlaceHolder';
@@ -14,9 +13,9 @@ import EventBoxPlaceHolder from '../components/EventBoxPlaceHolder';
 export default function Events({ navigation }) {
     const [events, setEvents] = useState([]);
     const [loading, setIsLoading] = useState(true);
-    const [search, setSearch] = useState(undefined);
     const [userData, setUserData] = useState({});
     const { getUserData } = useMainContext();
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         const onResponse = (response) => {
@@ -26,29 +25,33 @@ export default function Events({ navigation }) {
         const onError = (error) => {
             console.log(error);
         }
+
         getUserData((data) => {
             setUserData(data);
             const client = new apiClient(data.token);
-            client.getEventsList(onResponse, onError, search, undefined);
+            client.getEventsList(onResponse, onError, data.id);
         });
 
     }, []);
 
-    const updateSearch = async (searchString) => {
+    const onRefresh = useCallback(() => {
         const onResponse = (response) => {
-            setIsLoading(false);
             setEvents(response.events());
+            setRefreshing(false);
         }
+
         const onError = (error) => {
             console.log(error);
         }
 
-        await setSearch(searchString);
+        setRefreshing(true);
+        getUserData((data) => {
+            setUserData(data);
+            const client = new apiClient(data.token);
+            client.getEventsList(onResponse, onError, data.id);
+        });
 
-        await setIsLoading(true);
-        const client = new apiClient(userData.token);
-        client.getEventsList(onResponse, onError, searchString, undefined);
-    };
+      }, []);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -57,17 +60,14 @@ export default function Events({ navigation }) {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.searchBarContainer}
-            >
-                <SearchBar
-                    placeholder="Buscar"
-                    onChangeText={updateSearch}
-                    value={search}
-                    lightTheme
-                    inputContainerStyle={{backgroundColor:'white'}}
-                    containerStyle={{backgroundColor: 'white', width: '90%', marginTop: 15, borderRadius:15}}
-                />
-            </LinearGradient>
+            />
             <ScrollView 
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
                 contentContainerStyle={{ flexGrow: 1, alignItems: 'center'}}
                 style={styles.scrollContainer}>
                 {loading ? 
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     searchBarContainer: {
         backgroundColor: '#1A55D7',
         width: '100%',
-        height: 100,
+        height: 50,
         marginBottom: 25,
         display: 'flex',
         alignItems: 'center'
