@@ -58,9 +58,6 @@ export default function StatsScreen({ route, navigation }) {
                 :
                 <></>
             }
-            <Text style={statsScreenStyle.explainText}>
-                Cantidad de ingresos a través del tiempo
-            </Text>
             <Button 
                 style={statsScreenStyle.btnGoBack}
                 textColor={'black'}
