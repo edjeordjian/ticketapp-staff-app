@@ -103,11 +103,11 @@ export default function LineChartEntries({chartData, userEntries, fillShadowGrad
                 formatLabel={(value) => `${xScale[value]}`}
             />
 
-            <Text style={statsScreenStyle.explainText}>
-                Cantidad de ingresos a través del tiempo
-            </Text>
-
             <BlankLine number={2}/>
+
+            <Text style={statsScreenStyle.explainText}>
+                Cantidad de ingresos a través del tiempo.
+            </Text>
 
             <Text style={statsScreenStyle.title}>Usuarios
             </Text>
