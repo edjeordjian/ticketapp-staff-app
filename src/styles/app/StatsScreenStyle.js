@@ -15,18 +15,12 @@ const statsScreenStyle = StyleSheet.create({
         marginVertical: 35,
         marginLeft: '5%'
     },
-    nameTitle: {
-        color: '#ffffff',
-        fontWeight: 700,
-        fontSize: 18,
-        marginBottom: 15
-    },
-    messageContainer: {
-        backgroundColor: '#ffffff',
-        padding: 25,
-        width: 300,
-        margin: 15,
-        borderRadius: 5
+    explainText: {
+        marginLeft: '5%',
+        color: '#212A3E',
+        fontWeight: 400,
+        fontSize: 14,
+        marginBottom: 15,
     },
     btnGoBack: {
         width: '50%',
